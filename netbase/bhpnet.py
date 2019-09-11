@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import sys
 import socket
 import getopt
@@ -57,7 +59,7 @@ def client_sender(buffer):
 
                 if recv_len < 4096:
                     break
-            
+
             print(resp)
 
             buffer = input("")
@@ -86,6 +88,7 @@ def server_loop():
         client_thread = threading.Thread(target=client_handler, args=(client_socket,))
         client_thread.start()
 
+
 def client_handler(client_socket):
     global upload
     global upload_destination
@@ -94,7 +97,7 @@ def client_handler(client_socket):
 
     if len(upload_destination):
         file_buffer = ""
-        
+
         while True:
             data = client_socket.recv(1024)
 
@@ -112,7 +115,7 @@ def client_handler(client_socket):
             except:
                 resp = "Failed to saved file to %s\r\n" % upload_destination
                 client_socket.send(resp)
-        
+
     if len(execute):
         output = run_command(execute)
         client_socket.send(output)
@@ -138,6 +141,7 @@ def run_command(command):
 
     return output
 
+
 def main():
     global listen
     global command
@@ -150,9 +154,12 @@ def main():
         usage()
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hle:t:p:cu:",
-        ["help", "listen", "excute", "target", "port", "command", "upload"])
-    except getopt.GetoptError as err :
+        opts, args = getopt.getopt(
+            sys.argv[1:],
+            "hle:t:p:cu:",
+            ["help", "listen", "excute", "target", "port", "command", "upload"],
+        )
+    except getopt.GetoptError as err:
         print(str(err))
         usage()
 
